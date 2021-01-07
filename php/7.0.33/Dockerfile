@@ -4,8 +4,6 @@ LABEL maintainer="lestat@lestat.me"
 
 # 修改镜像源
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
-RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
-RUN sed -i 's/memory_limit = .*/memory_limit = '512M'/' /usr/local/etc/php/php.ini
 
 # 安装依赖,核心扩展,pecl扩展,composer工具
 RUN apk update && apk add --no-cache --virtual .build-deps \
@@ -19,12 +17,12 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
     freetype-dev \
     libjpeg-turbo-dev \
     libpng-dev \
-    && apk add --no-cache \
     curl \
     imagemagick \
     mysql-client \
     php7-bcmath \
     gettext \
+    supervisor \
     && pecl install imagick \
     && docker-php-ext-enable imagick \
     && docker-php-ext-install \
@@ -45,8 +43,7 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
     sysvsem \
     xmlrpc \
     mcrypt \
-    && docker-php-ext-install -j"$(getconf _NPROCESSORS_ONLN)" \
-    iconv \
+    && docker-php-ext-install -j"$(getconf _NPROCESSORS_ONLN)" iconv \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j"$(getconf _NPROCESSORS_ONLN)" gd \
     && pecl install -o -f redis \
@@ -66,5 +63,10 @@ RUN mkdir -p /usr/local/share/composer \
 
 WORKDIR /var/www/html
 
+COPY supervisord.conf /etc/supervisord.conf
+
 # 对其他容器开放9000端口
 EXPOSE 9000
+
+# start php-fpm via supervisor
+ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
