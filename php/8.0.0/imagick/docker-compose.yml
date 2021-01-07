@@ -1,0 +1,44 @@
+version: "3"
+services:
+  developing:
+    build: docker/developing
+    volumes:
+      - .:/var/app
+  testing7_2:
+    build: docker/testing7_2
+    volumes:
+      - .:/var/app
+    cap_add:
+      - SYS_ADMIN
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+  testing8_0:
+    build: docker/testing8_0
+    volumes:
+      - .:/var/app
+    cap_add:
+      - SYS_ADMIN
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+  fedora:
+    build: docker/fedora
+    image: imagick_fedora
+    volumes:
+      - .:/var/app
+    cap_add:
+      - SYS_ADMIN
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+  ubuntu:
+    build: docker/ubuntu
+    volumes:
+      - .:/var/app
+    cap_add:
+      - SYS_ADMIN
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+
