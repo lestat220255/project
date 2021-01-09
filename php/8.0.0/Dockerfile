@@ -63,6 +63,11 @@ RUN mkdir -p /usr/local/share/composer \
     # 配置composer中国全量镜像
     && composer config -g repo.packagist composer https://packagist.phpcomposer.com
 
+# 设置时区
+RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone \
+    && apk del tzdata
+
 WORKDIR /var/www/html
 
 COPY supervisord.conf /etc/supervisord.conf
