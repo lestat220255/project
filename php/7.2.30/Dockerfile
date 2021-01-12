@@ -24,10 +24,12 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
     gettext \
     supervisor \
     && pecl install \
+    swoole \
     imagick \
     mcrypt \
     && docker-php-ext-enable \
     imagick \
+    swoole \
     mcrypt \
     && docker-php-ext-install \
     curl \
