@@ -8,6 +8,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 # 安装依赖,核心扩展,pecl扩展,composer工具
 RUN apk update && apk add --no-cache --virtual .build-deps \
     $PHPIZE_DEPS \
+    nginx \
     libsodium \
     curl-dev \
     imagemagick-dev \
@@ -40,9 +41,15 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
     && docker-php-ext-install -j"$(getconf _NPROCESSORS_ONLN)" iconv \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j"$(getconf _NPROCESSORS_ONLN)" gd \
+    && pecl install \
+    protobuf-3.4.0 \
+    grpc \
     && pecl install -o -f redis \
     && rm -rf /tmp/pear \
-    && docker-php-ext-enable redis
+    && docker-php-ext-enable \
+    redis \
+    protobuf \
+    grpc
 
 COPY imagick /imagick
 
