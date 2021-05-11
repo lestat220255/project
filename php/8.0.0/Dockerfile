@@ -1,7 +1,5 @@
 FROM php:8.0.0-fpm-alpine3.12
 
-LABEL maintainer="lestat@lestat.me"
-
 # 修改镜像源
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
