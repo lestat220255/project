@@ -24,6 +24,7 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
     php7-bcmath \
     gettext \
     supervisor \
+    nginx \
     && docker-php-ext-install \
     curl \
     pdo \
@@ -39,17 +40,10 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
     sockets \
     sysvsem \
     && docker-php-ext-install -j"$(getconf _NPROCESSORS_ONLN)" iconv \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j"$(getconf _NPROCESSORS_ONLN)" gd \
-    && pecl install \
-    protobuf-3.4.0 \
-    grpc \
     && pecl install -o -f redis \
     && rm -rf /tmp/pear \
     && docker-php-ext-enable \
-    redis \
-    protobuf \
-    grpc
+    redis
 
 COPY imagick /imagick
 
@@ -74,6 +68,10 @@ RUN mkdir -p /usr/local/share/composer \
 RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
     && apk del tzdata
+
+# 初始化nginx pid目录
+RUN mkdir -p /run/nginx \
+    && chmod -R 777 /run/nginx
 
 WORKDIR /var/www/html
 
