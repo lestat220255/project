@@ -11,7 +11,7 @@ class MQDemo extends Controller
 {
     public function producer()
     {
-        $connection = new AMQPStreamConnection('rabbitmq', 5672, 'guest', 'guest');
+        $connection = new AMQPStreamConnection('rabbitmq', 5672, 'user', '123');
         $channel = $connection->channel();
         $channel->queue_declare('hello', false, false, false, false);
 
