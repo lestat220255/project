@@ -1,7 +1,7 @@
 version: "3"
 services:
   server:
-    image: php8
+    image: lestat220255/nginx-php:beta
     ports:
       - "80:80"
       #      - "443:443"

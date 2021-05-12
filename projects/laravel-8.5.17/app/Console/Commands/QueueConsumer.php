@@ -33,9 +33,7 @@ class QueueConsumer extends Command
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return int
+     * @throws \ErrorException
      */
     public function handle()
     {

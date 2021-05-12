@@ -54,7 +54,7 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
     soap \
     sockets \
     sysvsem \
-    && docker-php-ext-install -j"$(getconf _NPROCESSORS_ONLN)" iconv \
+    && docker-php-ext-install -j"$(getconf _NPROCESSORS_ONLN)" iconv opcache \
     && pecl install -o -f redis \
     && rm -rf /tmp/pear \
     && docker-php-ext-enable \
