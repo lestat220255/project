@@ -7,7 +7,7 @@ services:
       #      - "443:443"
       - "9001:9001"
     volumes:
-      - ./project:/var/www/html/project/:rw # 项目
+      - ./projects:/var/www/html/projects/:rw # 项目
       - ./docker/php/php.ini:/usr/local/etc/php/php.ini:ro
       - ./docker/php/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./docker/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
@@ -18,7 +18,7 @@ services:
       - ./docker/nginx/config/cert:/etc/nginx/cert/:ro # 证书
       - ./docker/nginx/supervisor.d/nginx.ini:/etc/supervisor.d/nginx.ini:ro # nginx进程
     container_name: server
-    working_dir: /var/www/html/project
+    working_dir: /var/www/html/projects
     networks:
       - local_network
   # 开发和测试环境加入共享网络连接redis

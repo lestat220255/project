@@ -43,13 +43,10 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
     && docker-php-ext-enable \
     redis
 
-COPY imagick /imagick
+ADD imagick/install-php-extensions /usr/local/bin/
 
-RUN cd /imagick \
-    && phpize && ./configure \
-    && make \
-    && make install \
-    && rm -rf /imagick
+RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && \
+    install-php-extensions imagick
 
 # 安装composer并允许root用户运行
 ENV COMPOSER_ALLOW_SUPERUSER=1
