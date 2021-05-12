@@ -84,8 +84,5 @@ WORKDIR /var/www/html
 
 COPY supervisord.conf /etc/supervisord.conf
 
-# 对其他容器开放9000端口
-EXPOSE 9000
-
 # start php-fpm via supervisor
 ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
