@@ -3,6 +3,23 @@ FROM php:8.0.0-fpm-alpine3.12
 # 修改镜像源
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
+ADD imagick/install-php-extensions /usr/local/bin/install-php-extensions
+
+RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && \
+    install-php-extensions imagick
+
+# Extract PHP source
+RUN apk update && apk add rabbitmq-c-dev \ 
+&& docker-php-source extract \
+# Create directory for amqp extension
+&& mkdir /usr/src/php/ext/amqp \
+# Download AMQP master branch files to extension directory
+&& curl -L https://github.com/php-amqp/php-amqp/archive/master.tar.gz | tar -xzC /usr/src/php/ext/amqp --strip-components=1 \
+# Install amqp extension using built-in docker binary
+&& docker-php-ext-install amqp \
+# Delete PHP source
+&& docker-php-source delete
+
 # 安装依赖,核心扩展,pecl扩展,composer工具
 RUN apk update && apk add --no-cache --virtual .build-deps \
     $PHPIZE_DEPS \
@@ -42,11 +59,6 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
     && rm -rf /tmp/pear \
     && docker-php-ext-enable \
     redis
-
-ADD imagick/install-php-extensions /usr/local/bin/
-
-RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && \
-    install-php-extensions imagick
 
 # 安装composer并允许root用户运行
 ENV COMPOSER_ALLOW_SUPERUSER=1

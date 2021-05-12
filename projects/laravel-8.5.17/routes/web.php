@@ -20,3 +20,7 @@ Route::get('/', function () {
 Route::get('/phpinfo', function () {
     return phpinfo();
 });
+
+Route::prefix('mq')->group(function () {
+    Route::get('/producer', [\App\Http\Controllers\MQDemo::class, 'producer']);
+});
