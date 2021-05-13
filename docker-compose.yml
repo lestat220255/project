@@ -54,20 +54,14 @@ services:
   #   networks:
   #     - local_network
   rabbitmq:
-    image: rabbitmq:3.8.16-alpine
-    ports:
-      - "5672:5672"
-    container_name: rabbitmq
-    networks:
-      - local_network
-  rabbitmq-management:
     image: rabbitmq:3.8.16-management-alpine
     environment:
       - RABBITMQ_DEFAULT_USER=user
       - RABBITMQ_DEFAULT_PASS=123
     ports:
       - "15672:15672"
-    container_name: rabbitmq-management
+      - "5672:5672"
+    container_name: rabbitmq
     networks:
       - local_network
 networks:
